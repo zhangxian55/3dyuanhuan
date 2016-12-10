@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>圆环</title>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+			background-color: black;
+		}
+		.stage{
+			width: 800px;
+			height: 400px;
+			border: 1px solid #000;
+			margin: 50px auto;
+			position: relative;
+			perspective: 800px;
+
+		}
+		.stage ul{
+			list-style: none;
+			transform-style:preserve-3d;
+ 			transition:all 1s ease 0s;
+		}
+		.stage ul li{
+			position: absolute;
+			width: 200px;
+			height: 130px;
+			left: 300px;
+			top: 135px;
+			perspective:1200px;
+			transform-style:preserve-3d;
+		}
+		.stage ul li img{
+			width: 200px;
+			height: 130px;
+		}
+		.stage ul li img.shadow{
+			top: 130px;
+			left: 0;
+			position: absolute;
+			transform:rotateX(80deg) translateZ(65px) translateY(55px) rotateZ(180deg) rotateY(180deg);
+		}
+		.stage ul li::before{
+			content:"";
+			position: absolute;
+			width: 200px;
+			height: 130px;
+			background: black;
+			opacity: 0.5;
+			transition:all 1s ease 0s;
+		}
+		.stage ul li::after{
+			content:"";
+			top: 130px;
+			left: 0;
+			position: absolute;
+			width: 200px;
+			height: 130px;
+			transform:rotateX(80deg) translateZ(65px) translateY(55px);
+			background:-webkit-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,1) 80%);
+			background:-moz-linear-gradient(top,rgba(0,0,0,0),rgba(0,0,0,1) 80%);
+		}
+		.stage ul li.liang::before{
+			opacity: 0;
+		}
+	</style>
+</head>
+<body>
+	 
+	<div class="stage">
+		<ul>
+			<li class="liang"><img src="images/shuzi/0.png" alt=""></li>
+			<li class="liang"><img src="images/shuzi/1.png" alt=""></li>
+			<li><img src="images/shuzi/2.png" alt=""></li>
+			<li><img src="images/shuzi/3.png" alt=""></li>
+			<li><img src="images/shuzi/4.png" alt=""></li>
+			<li><img src="images/shuzi/5.png" alt=""></li>
+			<li><img src="images/shuzi/6.png" alt=""></li>
+			<li><img src="images/shuzi/7.png" alt=""></li>
+			<li class="liang"><img src="images/shuzi/8.png" alt=""></li>
+		</ul>
+	</div>
+	<script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript" src="js/jquery.mousewheel.min.js"></script>
+	<script type="text/javascript">
+		$("li").each(function(i){
+			$(this).css("transform","rotateY(" + i * 40 + "deg) translateZ(374px)");
+		});
+
+		//制作倒影
+		$("li").each(function(){
+			$(this).find("img").clone().addClass("shadow").appendTo($(this));
+		});
+
+		var degree = 0;
+		//类名数组
+		var classArr = ["liang","liang","","","","","","","liang"];
+		//滚轮事件
+		$(document).mousewheel(function(event,delta){
+			// 阻止默认事件
+			event.preventDefault();
+			// 更改旋转度数
+			degree += 40 * delta;
+			$("ul").css("transform","rotateY(" + degree + "deg)");
+
+			if(delta < 0){
+				// 更改类名
+				classArr.unshift(classArr.pop());
+			}else{
+				classArr.push(classArr.shift());
+			}
+
+			$("li").each(function(i){
+				$(this).attr("class",classArr[i]);
+			})
+		});
+	</script>
+</body>
+</html>
